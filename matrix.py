@@ -22,30 +22,46 @@ class Matrix:
     def columns(self):
         return self._columns
 
+    def __getitem__(self, index):
+        if index < 0 or index >= len(self._m):
+            raise Exception()
+
+        return self._m[index]
+
+    def get_matrix(self):
+        return copy.deepcopy(self._m)
+
     def __str__(self):
         return '{}x{}'.format(self.rows, self.columns)
 
     def __mul__(self, other):
         if isinstance(other, int):
             # Scalar multiplication
-            m = copy.deepcopy(self._m)
+            m = self.get_matrix()
             for i in range(self.rows):
                 for j in range(self.columns):
                     m[i][j] *= other
             return Matrix(m)
         elif isinstance(other, Matrix):
             # Matrix multiplication
-            if self.rows != other.columns:
+            if self.columns != other.rows:
                 raise Exception('Cannot multiply - invalid matrix sizes')
 
+            m = [[0 for j in range(other.columns)] for i in range(self.rows)]
 
+            for i in range(self.rows):
+                for j in range(other.columns):
+                    val = 0
+                    for x in range(self.columns):
+                        val += self[i][x] * other[x][j]
+                    m[i][j] = val
 
-            pass
+            return Matrix(m)
         else:
             raise Exception()
 
-    def __add__(self, other):
-        if isinstance(other, Matrix) and Math
+    # def __add__(self, other):
+    #     if isinstance(other, Matrix) and Math
 
     def __mod__(self, other):
         for i in range(self.rows):
@@ -53,9 +69,9 @@ class Matrix:
                 self._m[i][j] %= other
 
 
+m1 = Matrix([[1, 2, 3], [4, 5, 6]])
+m2 = Matrix([[7, 8], [9, 10], [11, 12]])
 
-m = Matrix.empty_matrix(0, 0)
+m3 = m1 * m2
 
-m * 10
-
-m * Matrix(1, 1)
+print(m3.get_matrix())
