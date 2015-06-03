@@ -60,18 +60,34 @@ class Matrix:
         else:
             raise Exception()
 
-    # def __add__(self, other):
-    #     if isinstance(other, Matrix) and Math
+    def __add__(self, other):
+        if not isinstance(other, Matrix):
+            raise Exception()
 
-    def __mod__(self, other):
+        if self.rows != other.rows or self.columns != other.columns:
+            raise Exception('Cannot add - invalid matrix sizes')
+
+        m = [[0 for j in range(self.columns)] for i in range(self.rows)]
+
         for i in range(self.rows):
             for j in range(self.columns):
-                self._m[i][j] %= other
+                m[i][j] = self[i][j] + other[i][j]
+
+        return Matrix(m)
+
+    def __mod__(self, other):
+        m = self.get_matrix()
+        for i in range(self.rows):
+            for j in range(self.columns):
+                m[i][j] %= other
+
+        return Matrix(m)
 
 
-m1 = Matrix([[1, 2, 3], [4, 5, 6]])
-m2 = Matrix([[7, 8], [9, 10], [11, 12]])
+if __name__ == '__main__':
+    m1 = Matrix([[1, 2, 3], [4, 5, 6]])
+    m2 = Matrix([[7, 8], [9, 10], [11, 12]])
 
-m3 = m1 * m2
+    m3 = m1 * m2
 
-print(m3.get_matrix())
+    print(m3.get_matrix())
