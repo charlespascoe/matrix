@@ -1,5 +1,9 @@
 import copy
 
+
+class MatrixArithmeticError(Exception):
+    pass
+
 class Matrix:
     def __init__(self, matrix):
         self._rows = len(matrix)
@@ -45,7 +49,7 @@ class Matrix:
         elif isinstance(other, Matrix):
             # Matrix multiplication
             if self.columns != other.rows:
-                raise Exception('Cannot multiply - invalid matrix sizes')
+                raise MatrixArithmeticError('Cannot multiply - invalid matrix sizes')
 
             m = [[0 for j in range(other.columns)] for i in range(self.rows)]
 
@@ -68,11 +72,22 @@ class Matrix:
 
     def __pow__(self, exp):
         if self.rows != self.columns:
-            raise Exception('Only square matricies can be raised to a power')
+            raise MatrixArithmeticError('Only square matricies can be raised to a power')
+
+        if not isinstance(exp, int):
+            raise TypeError('Exponent must be an int')
 
         result = Matrix.identity_matrix(self.rows)
 
         m = Matrix(self.get_matrix())
+
+        if exp < 0:
+            m = m.inverse()
+
+            if m is None:
+                raise MatrixArithmeticError('Matrix is non-invertible')
+
+            exp = -exp
 
         while exp > 0:
             if exp & 1:
@@ -89,7 +104,7 @@ class Matrix:
             raise Exception()
 
         if self.rows != other.rows or self.columns != other.columns:
-            raise Exception('Cannot add - invalid matrix sizes')
+            raise MatrixArithmeticError('Cannot add - invalid matrix sizes')
 
         m = [[0 for j in range(self.columns)] for i in range(self.rows)]
 
@@ -112,7 +127,7 @@ class Matrix:
 
     def determinant(self):
         if self.rows != self.columns or self.rows == 0:
-            raise Exception('Determinant can only be calculated for square matrices')
+            raise MatrixArithmeticError('Determinant can only be calculated for square matrices')
 
         if self.rows == 1:
             return self[0][0]
@@ -132,7 +147,7 @@ class Matrix:
 
     def cofactor_matrix(self):
         if self.rows != self.columns or self.rows == 0:
-            raise Exception('Cofactor matrix can only be calculated for square matrices')
+            raise MatrixArithmeticError('Cofactor matrix can only be calculated for square matrices')
 
         if self.rows == 1:
             return Matrix([[self[0][0]]])

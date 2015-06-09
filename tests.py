@@ -1,4 +1,4 @@
-from matrix import Matrix
+from matrix import Matrix, MatrixArithmeticError
 import unittest
 
 class MatrixArithmetic(unittest.TestCase):
@@ -20,7 +20,7 @@ class MatrixArithmetic(unittest.TestCase):
     def test_invalid_maxtrix_size_multiplication(self):
         m2 = Matrix([[7, 8], [9, 10]])
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(MatrixArithmeticError):
             self.m * m2
 
     def test_matrix_addition(self):
@@ -35,7 +35,7 @@ class MatrixArithmetic(unittest.TestCase):
     def test_invalid_matrix_size_addition(self):
         m2 = Matrix([[7, 8], [9, 10], [11, 12]])
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(MatrixArithmeticError):
             self.m + m2
 
     def test_modulo(self):
@@ -43,6 +43,12 @@ class MatrixArithmetic(unittest.TestCase):
 
         self.assertEqual(result.get_matrix(), [[1, 2, 0], [1, 2, 0]])
         self.assertEqual(self.m.get_matrix(), [[1, 2, 3], [4, 5, 6]])
+
+    def test_invalid_exp_pow(self):
+        m = Matrix([[1, 2], [3, 4]])
+
+        with self.assertRaises(TypeError):
+            m**1.5
 
     def test_pow_2(self):
         m = Matrix([[1, 2], [3, 4]])
@@ -57,6 +63,14 @@ class MatrixArithmetic(unittest.TestCase):
 
         self.assertEqual(m.get_matrix(), [[1, 2], [3, 4]])
         self.assertEqual(result.get_matrix(), [[1069, 1558], [2337, 3406]])
+
+    def test_pow_inv(self):
+        m = Matrix([[1, 2], [3, 4]])
+        result = m**-1
+
+        self.assertEqual(m.get_matrix(), [[1, 2], [3, 4]])
+        self.assertEqual(result.get_matrix(), [[-2, 1], [1.5, -0.5]])
+
 
 
 class MatrixClassMethodsAndProperties(unittest.TestCase):
@@ -92,24 +106,24 @@ class MatrixTransformations(unittest.TestCase):
         self.assertEqual(result2.get_matrix(), [[1, 3], [7, 9]])
 
     def test_non_square_matrix_determinant(self):
-        m2 = Matrix([[1, 2, 3], [4, 5, 6]])
+        m = Matrix([[1, 2, 3], [4, 5, 6]])
 
-        with self.assertRaises(Exception):
-            m2.determinant()
+        with self.assertRaises(MatrixArithmeticError):
+            m.determinant()
 
     def test_1x1_determinant(self):
-        m2 = Matrix([[1]])
+        m = Matrix([[1]])
 
-        det = m2.determinant()
+        det = m.determinant()
 
-        self.assertEqual(m2.get_matrix(), [[1]])
+        self.assertEqual(m.get_matrix(), [[1]])
         self.assertEqual(det, 1)
 
     def test_2x2_determinant(self):
-        m2 = Matrix([[1, 2], [3, 4]])
-        det = m2.determinant()
+        m = Matrix([[1, 2], [3, 4]])
+        det = m.determinant()
 
-        self.assertEqual(m2.get_matrix(), [[1, 2], [3, 4]])
+        self.assertEqual(m.get_matrix(), [[1, 2], [3, 4]])
         self.assertEqual(det, -2)
 
     def test_3x3_determinant(self):
@@ -119,87 +133,87 @@ class MatrixTransformations(unittest.TestCase):
         self.assertEqual(det, 0)
 
     def test_another_3x3_determinant(self):
-        m2 = Matrix([[2, 3, 5], [7, 11, 13], [17, 19, 23]])
+        m = Matrix([[2, 3, 5], [7, 11, 13], [17, 19, 23]])
 
-        det = m2.determinant()
+        det = m.determinant()
 
-        self.assertEqual(m2.get_matrix(), [[2, 3, 5], [7, 11, 13], [17, 19, 23]])
+        self.assertEqual(m.get_matrix(), [[2, 3, 5], [7, 11, 13], [17, 19, 23]])
         self.assertEqual(det, -78)
 
     def test_4x4_determinant(self):
-        m2 = Matrix([[2, 3, 5, 7], [11, 13, 17, 19], [23, 29, 31, 37], [41, 43, 47, 53]])
+        m = Matrix([[2, 3, 5, 7], [11, 13, 17, 19], [23, 29, 31, 37], [41, 43, 47, 53]])
 
-        det = m2.determinant()
+        det = m.determinant()
 
-        self.assertEqual(m2.get_matrix(), [[2, 3, 5, 7], [11, 13, 17, 19], [23, 29, 31, 37], [41, 43, 47, 53]])
+        self.assertEqual(m.get_matrix(), [[2, 3, 5, 7], [11, 13, 17, 19], [23, 29, 31, 37], [41, 43, 47, 53]])
         self.assertEqual(det, 880)
 
     def test_non_sqaure_inverse(self):
-        m2 = Matrix([[1, 2, 3], [4, 5, 6]])
+        m = Matrix([[1, 2, 3], [4, 5, 6]])
 
-        with self.assertRaises(Exception):
-            m2.inverse()
+        with self.assertRaises(MatrixArithmeticError):
+            m.inverse()
 
     def test_matrix_with_no_inverse(self):
-        m2 = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        m = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 
-        inv_m2 = m2.inverse()
+        inv_m = m.inverse()
 
-        self.assertIsNone(inv_m2)
+        self.assertIsNone(inv_m)
 
     def test_1x1_cofactor_matrix(self):
-        m2 = Matrix([[1]])
+        m = Matrix([[1]])
 
-        cof_m2 = m2.cofactor_matrix()
+        cof_m = m.cofactor_matrix()
 
-        self.assertEqual(m2.get_matrix(), [[1]])
-        self.assertEqual(cof_m2.get_matrix(), [[1]])
+        self.assertEqual(m.get_matrix(), [[1]])
+        self.assertEqual(cof_m.get_matrix(), [[1]])
 
     def test_2x2_cofactor_matrix(self):
-        m2 = Matrix([[1, 2], [3, 4]])
+        m = Matrix([[1, 2], [3, 4]])
 
-        cof_m2 = m2.cofactor_matrix()
+        cof_m = m.cofactor_matrix()
 
-        self.assertEqual(m2.get_matrix(), [[1, 2], [3, 4]])
-        self.assertEqual(cof_m2.get_matrix(), [[4, -3], [-2, 1]])
+        self.assertEqual(m.get_matrix(), [[1, 2], [3, 4]])
+        self.assertEqual(cof_m.get_matrix(), [[4, -3], [-2, 1]])
 
     def test_3x3_cofactor_matrix(self):
-        m2 = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        m = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 
-        cof_m2 = m2.cofactor_matrix()
+        cof_m = m.cofactor_matrix()
 
-        self.assertEqual(m2.get_matrix(), [[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-        self.assertEqual(cof_m2.get_matrix(), [[-3, 6, -3], [6, -12, 6], [-3, 6, -3]])
+        self.assertEqual(m.get_matrix(), [[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        self.assertEqual(cof_m.get_matrix(), [[-3, 6, -3], [6, -12, 6], [-3, 6, -3]])
 
     def test_1x1_transpose(self):
-        m2 = Matrix([[1]])
+        m = Matrix([[1]])
 
-        t_m2 = m2.transpose()
+        t_m = m.transpose()
 
-        self.assertEqual(m2.get_matrix(), [[1]])
-        self.assertEqual(t_m2.get_matrix(), [[1]])
+        self.assertEqual(m.get_matrix(), [[1]])
+        self.assertEqual(t_m.get_matrix(), [[1]])
 
     def test_2x2_transpose(self):
-        m2 = Matrix([[1, 2], [3, 4]])
+        m = Matrix([[1, 2], [3, 4]])
 
-        t_m2 = m2.transpose()
+        t_m = m.transpose()
 
-        self.assertEqual(m2.get_matrix(), [[1, 2], [3, 4]])
-        self.assertEqual(t_m2.get_matrix(), [[1, 3], [2, 4]])
+        self.assertEqual(m.get_matrix(), [[1, 2], [3, 4]])
+        self.assertEqual(t_m.get_matrix(), [[1, 3], [2, 4]])
 
     def test_3x3_transpose(self):
-        m2 = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        m = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 
-        t_m2 = m2.transpose()
+        t_m = m.transpose()
 
-        self.assertEqual(m2.get_matrix(), [[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-        self.assertEqual(t_m2.get_matrix(), [[1, 4, 7], [2, 5, 8], [3, 6, 9]])
+        self.assertEqual(m.get_matrix(), [[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        self.assertEqual(t_m.get_matrix(), [[1, 4, 7], [2, 5, 8], [3, 6, 9]])
 
 
     def test_inverse(self):
-        m2 = Matrix([[1, 2], [3, 4]])
+        m = Matrix([[1, 2], [3, 4]])
 
-        inv_m2 = m2.inverse()
+        inv_m = m.inverse()
 
-        self.assertEqual(m2.get_matrix(), [[1, 2], [3, 4]])
-        self.assertEqual(inv_m2.get_matrix(), [[-2, 1], [1.5, -0.5]])
+        self.assertEqual(m.get_matrix(), [[1, 2], [3, 4]])
+        self.assertEqual(inv_m.get_matrix(), [[-2, 1], [1.5, -0.5]])
