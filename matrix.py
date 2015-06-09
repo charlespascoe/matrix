@@ -60,6 +60,24 @@ class Matrix:
         else:
             raise Exception()
 
+    def __pow__(self, exp):
+        if self.rows != self.columns:
+            raise Exception('Only square matricies can be raised to a power')
+
+        result = Matrix.identity_matrix(self.rows)
+
+        m = Matrix(self.get_matrix())
+
+        while exp > 0:
+            if exp & 1:
+                result *= m
+
+            m *= m
+
+            exp >>= 1
+
+        return result
+
     def __add__(self, other):
         if not isinstance(other, Matrix):
             raise Exception()

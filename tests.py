@@ -44,6 +44,20 @@ class MatrixArithmetic(unittest.TestCase):
         self.assertEqual(result.get_matrix(), [[1, 2, 0], [1, 2, 0]])
         self.assertEqual(self.m.get_matrix(), [[1, 2, 3], [4, 5, 6]])
 
+    def test_pow_2(self):
+        m = Matrix([[1, 2], [3, 4]])
+        result = m**2
+
+        self.assertEqual(m.get_matrix(), [[1, 2], [3, 4]])
+        self.assertEqual(result.get_matrix(), [[7, 10], [15, 22]])
+
+    def test_pow_5(self):
+        m = Matrix([[1, 2], [3, 4]])
+        result = m**5
+
+        self.assertEqual(m.get_matrix(), [[1, 2], [3, 4]])
+        self.assertEqual(result.get_matrix(), [[1069, 1558], [2337, 3406]])
+
 
 class MatrixClassMethodsAndProperties(unittest.TestCase):
     def setUp(self):
