@@ -91,4 +91,38 @@ class MatrixTransformations(unittest.TestCase):
         self.assertEqual(result.get_matrix(), [[5, 6], [8, 9]])
         self.assertEqual(result2.get_matrix(), [[1, 3], [7, 9]])
 
+    def test_non_square_matrix_determinant(self):
+        m2 = Matrix([[1, 2, 3], [4, 5, 6]])
+
+        with self.assertRaises(Exception):
+            m2.determinant()
+
+    def test_2x2_determinant(self):
+        m2 = Matrix([[1, 2], [3, 4]])
+        det = m2.determinant()
+
+        self.assertEqual(m2.get_matrix(), [[1, 2], [3, 4]])
+        self.assertEqual(det, -2)
+
+    def test_3x3_determinant(self):
+        det = self.m.determinant()
+
+        self.assertEqual(self.m.get_matrix(), [[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        self.assertEqual(det, 0)
+
+    def test_another_3x3_determinant(self):
+        m2 = Matrix([[2, 3, 5], [7, 11, 13], [17, 19, 23]])
+
+        det = m2.determinant()
+
+        self.assertEqual(m2.get_matrix(), [[2, 3, 5], [7, 11, 13], [17, 19, 23]])
+        self.assertEqual(det, -78)
+
+    def test_4x4_determinant(self):
+        m2 = Matrix([[2, 3, 5, 7], [11, 13, 17, 19], [23, 29, 31, 37], [41, 43, 47, 53]])
+
+        det = m2.determinant()
+
+        self.assertEqual(m2.get_matrix(), [[2, 3, 5, 7], [11, 13, 17, 19], [23, 29, 31, 37], [41, 43, 47, 53]])
+        self.assertEqual(det, 880)
 

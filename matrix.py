@@ -104,3 +104,20 @@ class Matrix:
     def submatrix(self, not_i, not_j):
         return Matrix([[self._m[i][j] for j in range(self.columns) if j != not_j] for i in range(self.rows) if i != not_i])
 
+    def determinant(self):
+        if self.rows != self.columns or self.rows == 0:
+            raise Exception('Determinant can only be calculated for square matrices')
+
+        if self.rows == 2:
+            return self[0][0] * self[1][1] - self[0][1] * self[1][0]
+
+        coefficient = 1
+
+        det = 0
+
+        for j in range(self.columns):
+            det += coefficient * self[0][j] * self.submatrix(0, j).determinant()
+            coefficient *= -1
+
+        return det
+
