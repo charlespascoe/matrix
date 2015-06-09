@@ -105,6 +105,12 @@ class MatrixExponentation(unittest.TestCase):
         self.assertEqual(self.m.get_matrix(), [[1, 2], [3, 4]])
         self.assertEqual(result.get_matrix(), [[-2, 1], [1.5, -0.5]])
 
+    def test_non_invertible_inverse_pow(self):
+        m = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+
+        with self.assertRaises(MatrixArithmeticError):
+            m**-2
+
 
 class MatrixClassMethodsAndProperties(unittest.TestCase):
     def setUp(self):
