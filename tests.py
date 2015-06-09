@@ -79,5 +79,16 @@ class MatrixClassMethodsAndProperties(unittest.TestCase):
 
         self.assertEqual(i_m.get_matrix(), [[1, 0, 0], [0, 1, 0], [0, 0, 1]])
 
+class MatrixTransformations(unittest.TestCase):
+    def setUp(self):
+        self.m = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+
+    def test_submatrix(self):
+        result = self.m.submatrix(0, 0)
+        result2 = self.m.submatrix(1, 1)
+
+        self.assertEqual(self.m.get_matrix(), [[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        self.assertEqual(result.get_matrix(), [[5, 6], [8, 9]])
+        self.assertEqual(result2.get_matrix(), [[1, 3], [7, 9]])
 
 

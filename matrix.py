@@ -101,3 +101,6 @@ class Matrix:
 
         return Matrix(m)
 
+    def submatrix(self, not_i, not_j):
+        return Matrix([[self._m[i][j] for j in range(self.columns) if j != not_j] for i in range(self.rows) if i != not_i])
+
