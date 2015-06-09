@@ -1,6 +1,18 @@
 from matrix import Matrix, MatrixArithmeticError
 import unittest
 
+
+class MatrixIndexing(unittest.TestCase):
+    def setUp(self):
+        self.m = Matrix([[1, 2], [3, 4]])
+
+    def test_out_of_range_index(self):
+        with self.assertRaises(IndexError):
+            self.m[5]
+
+    def test_index(self):
+        self.assertEqual(self.m[0], [1, 2])
+
 class MatrixMultiplication(unittest.TestCase):
     def setUp(self):
         self.m = Matrix([[1, 2, 3], [4, 5, 6]])
