@@ -62,13 +62,13 @@ class Matrix:
 
             return Matrix(m)
         else:
-            raise Exception('Invalid multiplication value: {}'.format(other))
+            raise TypeError('Invalid multiplication type: {}'.format(type(other)))
 
     def __div__(self, other):
         if isinstance(other, int) or isinstance(other, float):
             return self * (1 / float(other))
         else:
-            raise Exception('Invalid division value: {}'.format(other))
+            raise TypeError('Invalid division type: {}'.format(type(other)))
 
     def __pow__(self, exp):
         if self.rows != self.columns:
@@ -101,7 +101,7 @@ class Matrix:
 
     def __add__(self, other):
         if not isinstance(other, Matrix):
-            raise Exception()
+            raise TypeError('Matrix addition requires another matrix')
 
         if self.rows != other.rows or self.columns != other.columns:
             raise MatrixArithmeticError('Cannot add - invalid matrix sizes')
@@ -115,6 +115,9 @@ class Matrix:
         return Matrix(m)
 
     def __mod__(self, other):
+        if not isinstance(other, int) or isinstance(other, float):
+            raise TypeError('Invalid modulus type: {}'.format(type(other)))
+
         m = self.get_matrix()
         for i in range(self.rows):
             for j in range(self.columns):
