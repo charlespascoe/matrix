@@ -35,7 +35,7 @@ class Matrix:
         return '{}x{}'.format(self.rows, self.columns)
 
     def __mul__(self, other):
-        if isinstance(other, int):
+        if isinstance(other, int) or isinstance(other, float):
             # Scalar multiplication
             m = self.get_matrix()
             for i in range(self.rows):
@@ -58,7 +58,13 @@ class Matrix:
 
             return Matrix(m)
         else:
-            raise Exception()
+            raise Exception('Invalid multiplication value: {}'.format(other))
+
+    def __div__(self, other):
+        if isinstance(other, int) or isinstance(other, float):
+            return self * (1 / float(other))
+        else:
+            raise Exception('Invalid division value: {}'.format(other))
 
     def __pow__(self, exp):
         if self.rows != self.columns:
@@ -108,6 +114,9 @@ class Matrix:
         if self.rows != self.columns or self.rows == 0:
             raise Exception('Determinant can only be calculated for square matrices')
 
+        if self.rows == 1:
+            return self[0][0]
+
         if self.rows == 2:
             return self[0][0] * self[1][1] - self[0][1] * self[1][0]
 
@@ -120,4 +129,31 @@ class Matrix:
             coefficient *= -1
 
         return det
+
+    def cofactor_matrix(self):
+        if self.rows != self.columns or self.rows == 0:
+            raise Exception('Cofactor matrix can only be calculated for square matrices')
+
+        if self.rows == 1:
+            return Matrix([[self[0][0]]])
+
+        c = Matrix.empty_matrix(self.rows, self.columns)
+
+        for i in range(self.rows):
+            for j in range(self.columns):
+                c[i][j] = pow(-1, i+j) * self.submatrix(i, j).determinant()
+
+        return c
+
+    def transpose(self):
+        return Matrix([[self[i][j] for i in range(self.rows)] for j in range(self.columns)])
+
+    def inverse(self):
+        det = self.determinant()
+
+        if det == 0:
+            return None
+
+        return self.cofactor_matrix().transpose() / det
+
 
